@@ -12,19 +12,28 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
+  ReactiveFormsModule,
   ValidationErrors,
 } from '@angular/forms';
 import { Observable, of } from 'rxjs';
+import { RequiredComponent } from './required.component';
 
 @Component({
   selector: 'child',
   standalone: true,
-  template: '<div [formGroup]="group"></div>',
+  imports: [
+    ReactiveFormsModule, RequiredComponent
+  ],
+  template: `<div [formGroup]="group">
+  <required [group]="group" [value]="isValid" />
+  <button (click)="click()">CLICK TO TOGGLE (2)</button>
+  </div>`,
 })
-export class RequiredComponent implements OnInit {
+export class ChildComponent implements OnInit {
   @Input() group!: FormGroup;
   private fc?: FormControl;
   @Input() name!: string;
+  isValid = false;
   
 
   ngOnInit() {
@@ -32,4 +41,8 @@ export class RequiredComponent implements OnInit {
   }
 
   ngOnDestroy(): void {}
+
+  click() {
+    this.isValid = !this.isValid;
+  }
 }
